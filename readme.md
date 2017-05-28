@@ -32,3 +32,32 @@ To verify that they are connected:
     / # ping 172.20.0.2
 
 
+### Starting `sender` as TCP bridge
+
+1st shell:
+
+    cd demo
+    docker build -t roxel/dd .
+    doc up
+
+Django application is now running on port 8080 of the host system.
+In 2nd shell do:
+
+    cd sender
+    python sender.py
+    
+TCP server is now running on port 5000.
+Now in 3rd shell:
+
+    python http_tester.py
+    
+or:
+
+    python tcp_tester.py
+    
+When testers are run, they should issue proper type of request to localhost:5000. 
+Sender passes them forward to django application and returns response from there.
+Unfortunately, nothing is returned... Just `b''` in case of use http_tester.py 
+(because django understands request and answers but Sender can get the response). 
+In this scenerio tcp_tester.py don't get any response, because django only answers HTTP.
+
