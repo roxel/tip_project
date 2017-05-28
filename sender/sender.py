@@ -5,10 +5,21 @@ import socketserver
 
 class ThreadedTCPRequestHandler(socketserver.BaseRequestHandler):
 
+    ip = "127.0.0.1"
+    port = 8080
+
+    def forward(self, ip, port, message):
+        print("forwarding")
+        with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as sock:
+            sock.connect((ip, port))
+            sock.sendall(message)
+            response = sock.recv(1024)
+            return response
+
     def handle(self):
-        data = str(self.request.recv(1024), 'ascii')
-        cur_thread = threading.current_thread()
-        response = bytes("{}: {}".format(cur_thread.name, data), 'ascii')
+        print("handling")
+        data = self.request.recv(1024)
+        response = self.forward(self.ip, self.port, data)
         self.request.sendall(response)
 
 
@@ -16,16 +27,10 @@ class ThreadedTCPServer(socketserver.ThreadingMixIn, socketserver.TCPServer):
     pass
 
 
-def client(ip, port, message):
-    with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as sock:
-        sock.connect((ip, port))
-        sock.sendall(bytes(message, 'ascii'))
-        response = str(sock.recv(1024), 'ascii')
-        print("Received: {}".format(response))
-
-
 if __name__ == "__main__":
     HOST, PORT = "0.0.0.0", 5000
+
+    print("starting sender")
 
     server = ThreadedTCPServer((HOST, PORT), ThreadedTCPRequestHandler)
     with server:
