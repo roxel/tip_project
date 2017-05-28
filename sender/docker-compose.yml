@@ -2,7 +2,7 @@ version: "3"
 services:
   sender:
     image: roxel/tip_sender
-    command: python -m http.server 5000
+#    command: python sender.py
     restart: always
     ports:
       - "5000:5000"

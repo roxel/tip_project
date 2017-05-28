@@ -1,10 +1,17 @@
 FROM python:latest
 MAINTAINER Piotr Roksela <piotr@roksela.pl>
 
+ENV APP_DIR=/home/sender \
+    APP_PORT=5000
+
+COPY . $APP_DIR
+
 COPY ./docker-entrypoint.sh /
 RUN chmod +x /docker-entrypoint.sh
 
-EXPOSE 5000
+VOLUME ["$APP_DIR"]
+EXPOSE $APP_PORT
 
+WORKDIR $APP_DIR
 ENTRYPOINT ["/docker-entrypoint.sh"]
-CMD ["python"]
+CMD ["sender"]

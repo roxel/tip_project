@@ -10,7 +10,7 @@ def client(ip, port, message):
 
 
 if __name__ == "__main__":
-    host, port = "0.0.0.0", 5000
+    host, port = "127.0.0.1", 5000
 
     client(host, port, "Hello World 1")
     client(host, port, "Hello World 2")
