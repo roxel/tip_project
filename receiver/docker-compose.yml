@@ -1,7 +1,7 @@
 version: "3"
 services:
   receiver:
-    image: roxel/tip_receiver
+    image: msendera/tip_receiver
     command: sh
     ports:
       - "5001:5001"

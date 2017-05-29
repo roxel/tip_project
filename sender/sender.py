@@ -3,6 +3,7 @@ import threading
 import socketserver
 
 
+
 class ThreadedTCPRequestHandler(socketserver.BaseRequestHandler):
 
     ip = "127.0.0.1"
@@ -14,12 +15,14 @@ class ThreadedTCPRequestHandler(socketserver.BaseRequestHandler):
             sock.connect((ip, port))
             sock.sendall(message)
             response = sock.recv(1024)
+            print("response: " + response.decode())
             return response
 
     def handle(self):
         print("handling")
         data = self.request.recv(1024)
         response = self.forward(self.ip, self.port, data)
+        print("response: "+response.decode())
         self.request.sendall(response)
 
 

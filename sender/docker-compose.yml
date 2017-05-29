@@ -1,8 +1,8 @@
 version: "3"
 services:
   sender:
-    image: roxel/tip_sender
-#    command: python sender.py
+    image: msendera/tip_sender
+    command: python -m http.server 5000
     restart: always
     ports:
       - "5000:5000"
