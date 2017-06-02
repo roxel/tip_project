@@ -2,7 +2,25 @@ TIP Project
 =====
 
 The solution consists of two apps isolated as docker containers: sender and receiver.
-Docker Compose can be used to access the containers. This way they will both join the same bridge network
+Docker Compose can be used to access the containers. 
+
+## Demo app
+
+Demo app is a Python Django application running in Docker container. To build the image and start application:
+ 
+    docker build -t roxel/dd .
+    doc up -d
+    curl "127.0.0.1:8080/polls/"
+
+## Sender image
+
+    docker build -t roxel/sender .
+    doc up -d
+    
+
+## Docker bridge network for local simulation 
+
+This way they will both join the same bridge network
 and will be able to access themselves directly using TCP/IP communication.
 
 To verify that they are connected:
