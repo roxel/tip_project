@@ -22,9 +22,10 @@ def link_counter(starting_address):
 
     links = check_website(address_tested)
     link_count = len(links)
+    links = [link["href"] for link in links]
     for link in links:
-        if "http" in link["href"]:
-            level_1_links = check_website(link["href"])
+        if "http" in link:
+            level_1_links = check_website(link)
             link_count += len(level_1_links)
 
     finished = datetime.datetime.now()
