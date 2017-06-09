@@ -1,25 +1,46 @@
-from datetime import datetime
 import json
+from datetime import datetime
 from mitmproxy import http
 
+#
+# starting receiver:
+#       mitmdump -s receiver.py -p 5001 -R http://localhost:8000
+#
+#
 
-def tip_time():
-    return str(datetime.now())
+TIP_INCOMING = "TIP-Incoming"
+TIP_APP_INCOMING = "TIP-App-Incoming"
+TIP_OUTGOING = "TIP-Outgoing"
+TIP_APP_OUTGOING = "TIP-App-Outgoing"
+
+time_format = "%Y-%m-%d %H:%M:%S.%f"
+
+
+def tip_time_to_str():
+    return datetime.now().strftime(time_format)
+
+
+def str_to_tip_time(time_str):
+    return datetime.strptime(time_str, time_format)
 
 
 def request(flow: http.HTTPFlow) -> None:
-    "time before passing to application"
-    flow.request.headers["TIP-App-Incoming"] = tip_time()
-    print(json.dumps(dict(flow.request.headers)))
+    """time before passing to application"""
+    pass
+    # if TIP_REQUEST_HEADER in flow.request.headers:
+    #     flow.tip_incoming = tip_time()
+    # print(json.dumps(dict(flow.request.headers)))
 
 
 def response(flow: http.HTTPFlow) -> None:
-    "time after coming from application"
-    flow.response.headers["TIP-App-Outgoing"] = tip_time()
-    print(json.dumps(dict(flow.response.headers)))
+    """time after coming from application"""
+    flow.response.headers[TIP_APP_OUTGOING] = tip_time_to_str()
+    # print(json.dumps(dict(flow.request.headers)))
+    #
+    # print(json.dumps(dict(flow.response.headers)))
+    # print(flow.tip_app_incoming)
 
 
-# mitmdump -s receiver.py -p 5001 -R http://localhost:8000
 
 
 
