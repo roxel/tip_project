@@ -17,8 +17,8 @@ TIP_APP_OUTGOING = "TIP-App-Outgoing"
 time_format = "%Y-%m-%d %H:%M:%S.%f"
 
 
-def tip_time_to_str():
-    return datetime.now().strftime(time_format)
+def tip_time_to_str(d):
+    return d.strftime(time_format)
 
 
 def str_to_tip_time(time_str):
@@ -43,26 +43,39 @@ def time_measure():
         return False
 
 
+def s2r_time(flow: http.HTTPFlow):
+    return time_difference_str(
+        t1_str=flow.response.headers.get(TIP_INCOMING),
+        t2_str=flow.response.headers.get(TIP_APP_INCOMING),
+    )
+
+
+def r2s_time(flow: http.HTTPFlow):
+    return time_difference(
+        time_str=flow.response.headers.get(TIP_APP_OUTGOING),
+        time_datetime=datetime.now(),
+    )
+
+
+def r2r_time(flow: http.HTTPFlow):
+    return time_difference_str(flow.response.headers[TIP_APP_INCOMING], flow.response.headers[TIP_APP_OUTGOING])
+
+
 def request(flow: http.HTTPFlow) -> None:
     "time before passing to receiver"
     #if time_measure():
       #  print("TIME_INCOMING_ADDED")
-    flow.request.headers[TIP_INCOMING] = tip_time_to_str()
+    flow.request.headers[TIP_INCOMING] = tip_time_to_str(datetime.now())
 
 
 def response(flow: http.HTTPFlow) -> None:
     """time after coming from application"""
     # flow.response.headers["TIP-Received"] = tip_time()
     if TIP_APP_OUTGOING in flow.response.headers:
-        r2s_time = time_difference(
-            time_str=flow.response.headers.get(TIP_APP_OUTGOING),
-            time_datetime=datetime.now(),
-        )
-        print("R->S time: {}".format(r2s_time))
-        s2r_time = time_difference_str(
-            t1_str=flow.response.headers.get(TIP_INCOMING),
-            t2_str=flow.response.headers.get(TIP_APP_INCOMING),
-        )
-        print("S->R time: {}".format(s2r_time))
+        r2s_tim = r2s_time(flow)
+        s2r_tim = s2r_time(flow)
+        r2r_tim = r2r_time(flow)
+
+
 
 
