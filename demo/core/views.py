@@ -38,6 +38,6 @@ def link_counter(starting_address):
 
 @csrf_exempt
 def index(request):
-    message = link_counter('http://www.ki.agh.edu.pl/')
+    message = link_counter('http://www.aeklors.com/')
     return HttpResponse(message)
     # return HttpResponse(request)

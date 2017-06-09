@@ -1,6 +1,7 @@
-import json
 from datetime import datetime
+import json
 from mitmproxy import http
+import random
 
 #
 # starting sender:
@@ -35,8 +36,17 @@ def time_difference_str(t1_str, t2_str):
     return t2 - t1
 
 
+def time_measure():
+    if random.uniform(0.0, 1.0) <= 0.2:
+        return True
+    else:
+        return False
+
+
 def request(flow: http.HTTPFlow) -> None:
-    """time before passing to receiver"""
+    "time before passing to receiver"
+    #if time_measure():
+      #  print("TIME_INCOMING_ADDED")
     flow.request.headers[TIP_INCOMING] = tip_time_to_str()
 
 
