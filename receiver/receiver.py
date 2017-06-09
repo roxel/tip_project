@@ -24,21 +24,30 @@ def str_to_tip_time(time_str):
     return datetime.strptime(time_str, time_format)
 
 
+def time_difference(time_str, time_datetime):
+    time_app_outgoing = str_to_tip_time(time_str)
+    return time_datetime - time_app_outgoing
+
+
+def time_difference_str(t1_str, t2_str):
+    t1 = str_to_tip_time(t1_str)
+    t2 = str_to_tip_time(t2_str)
+    return t2 - t1
+
+
 def request(flow: http.HTTPFlow) -> None:
     """time before passing to application"""
-    pass
-    # if TIP_REQUEST_HEADER in flow.request.headers:
-    #     flow.tip_incoming = tip_time()
+    if TIP_INCOMING in flow.request.headers:
+        flow.tip_incoming = tip_time_to_str()
     # print(json.dumps(dict(flow.request.headers)))
 
 
 def response(flow: http.HTTPFlow) -> None:
     """time after coming from application"""
-    flow.response.headers[TIP_APP_OUTGOING] = tip_time_to_str()
-    # print(json.dumps(dict(flow.request.headers)))
-    #
-    # print(json.dumps(dict(flow.response.headers)))
-    # print(flow.tip_app_incoming)
+    if TIP_INCOMING in flow.request.headers:
+        flow.response.headers[TIP_APP_OUTGOING] = tip_time_to_str()
+        flow.response.headers[TIP_APP_INCOMING] = flow.tip_incoming
+        flow.response.headers[TIP_INCOMING] = flow.request.headers[TIP_INCOMING]
 
 
 
