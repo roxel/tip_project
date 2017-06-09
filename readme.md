@@ -10,72 +10,27 @@ Demo app is a Python Django application running in Docker container. To build th
  
     docker build -t roxel/dd .
     doc up -d
-    curl "127.0.0.1:8080/polls/"
+    curl "127.0.0.1:8080/http://www.google.com"
 
 ## Sender image
 
     docker build -t roxel/sender .
     doc up -d
     
+## Receiver image
 
-## Docker bridge network for local simulation 
+    docker build -t roxel/receiver .
+    doc up -d
 
-This way they will both join the same bridge network
-and will be able to access themselves directly using TCP/IP communication.
+## Starting
 
-To verify that they are connected:
+Sender and Receiver use mitmproxy.
+To run receiver (redirect from port 5001 to <http://localhost:8000>)
 
-1. Start sender.
+    mitmdump -s receiver.py -p 5001 -R http://localhost:8000
 
+To run sender (redirect from port 5000 to <http://localhost:5001>)
 
-    cd sender
-    docker-compose up -d
+    mitmdump -s sender.py -p 5000 -R http://localhost:5001
 
-2. Check its IP address.
-
-
-    docker inspect sender_sender_1
-    ... # in returned json config find IPAddress, e.g.:
-    
-                    "Gateway": "172.20.0.1",
-                    "IPAddress": "172.20.0.2",
-                    "IPPrefixLen": 16,
-
-
-    
-3. Start the receiver and ping correct address.
-
-
-    doc run --service-ports receiver sh
-    / # ping 172.20.0.2
-
-
-### Starting `sender` as TCP bridge
-
-1st shell:
-
-    cd demo
-    docker build -t roxel/dd .
-    doc up
-
-Django application is now running on port 8080 of the host system.
-In 2nd shell do:
-
-    cd sender
-    python sender.py
-    
-TCP server is now running on port 5000.
-Now in 3rd shell:
-
-    python http_tester.py
-    
-or:
-
-    python tcp_tester.py
-    
-When testers are run, they should issue proper type of request to localhost:5000. 
-Sender passes them forward to django application and returns response from there.
-Unfortunately, nothing is returned... Just `b''` in case of use http_tester.py 
-(because django understands request and answers but Sender can get the response). 
-In this scenerio tcp_tester.py don't get any response, because django only answers HTTP.
 

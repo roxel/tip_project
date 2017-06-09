@@ -3,11 +3,6 @@ import json
 from datetime import datetime
 from mitmproxy import http
 
-#
-# starting receiver:
-#       mitmdump -s receiver.py -p 5001 -R http://localhost:8000
-#
-#
 
 TIP_INCOMING = "TIP-Incoming"
 TIP_APP_INCOMING = "TIP-App-Incoming"

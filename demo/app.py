@@ -1,8 +1,15 @@
 import requests
 import datetime
 from bs4 import BeautifulSoup
-from django.http import HttpResponse
-from django.views.decorators.csrf import csrf_exempt
+from flask import Flask
+app = Flask(__name__)
+
+
+@app.route('/')
+@app.route('/<path:website>')
+def index(website='http://www.aeklors.com/'):
+    print(website)
+    return link_counter(website)
 
 
 def check_website(address):
@@ -36,8 +43,5 @@ def link_counter(starting_address):
     return message
 
 
-@csrf_exempt
-def index(request):
-    message = link_counter('http://www.aeklors.com/')
-    return HttpResponse(message)
-    # return HttpResponse(request)
+app.run(host="0.0.0.0", port=8000, debug=True)
+
