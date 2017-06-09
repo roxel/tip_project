@@ -3,12 +3,6 @@ import json
 from mitmproxy import http
 import random
 
-#
-# starting sender:
-#        mitmdump -s sender.py -p 5000 -R http://localhost:5001
-#
-#
-
 TIP_INCOMING = "TIP-Incoming"
 TIP_APP_INCOMING = "TIP-App-Incoming"
 TIP_OUTGOING = "TIP-Outgoing"
@@ -72,9 +66,12 @@ def response(flow: http.HTTPFlow) -> None:
     """time after coming from application"""
     # flow.response.headers["TIP-Received"] = tip_time()
     if TIP_APP_OUTGOING in flow.response.headers:
+        time_now = tip_time_to_str(datetime.now())
         r2s_tim = r2s_time(flow)
-        s2r_tim = s2r_time(flow)
         r2r_tim = r2r_time(flow)
+        s2r_tim = s2r_time(flow)
+        with open("measurements.txt", "a+") as f:
+            f.write("{};{};{};{}\n".format(time_now, s2r_tim, r2r_tim, r2s_tim))
 
 
 
