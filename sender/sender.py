@@ -8,6 +8,7 @@ import random
 #        mitmdump -s sender.py -p 5000 -R http://localhost:5001
 #
 #
+MEASUREMENT_PERCENTAGE = 0.2
 
 TIP_INCOMING = "TIP-Incoming"
 TIP_APP_INCOMING = "TIP-App-Incoming"
@@ -37,7 +38,7 @@ def time_difference_str(t1_str, t2_str):
 
 
 def time_measure():
-    if random.uniform(0.0, 1.0) <= 0.2:
+    if random.uniform(0.0, 1.0) <= MEASUREMENT_PERCENTAGE:
         return True
     else:
         return False
@@ -75,7 +76,3 @@ def response(flow: http.HTTPFlow) -> None:
         r2s_tim = r2s_time(flow)
         s2r_tim = s2r_time(flow)
         r2r_tim = r2r_time(flow)
-
-
-
-

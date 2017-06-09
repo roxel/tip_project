@@ -1,4 +1,4 @@
-FROM python:latest
+FROM mitmproxy/mitmproxy
 MAINTAINER Piotr Roksela <piotr@roksela.pl>
 
 ENV APP_DIR=/home/sender \
