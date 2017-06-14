@@ -64,14 +64,14 @@ The application address can be changed in `docker-compose.yml` file by changing 
 ### Demo app
 
 Demo application is based on a Python Flask framework. It's a basic crawler/link counter. For every path received as:
-`http://127.0.0.1:8080/<address-to-test>` it visits the address and all websites referenced in `<a>` tags, then it returns 
+`http://127.0.0.1:8000/<address-to-test>` it visits the address and all websites referenced in `<a>` tags, then it returns
 total count of all the links on those websites and time taken by this test.
 
 App can be started in Docker container. To build image and start the application:
  
     docker build -t tip_dd .
     docker-compose up -d
-    curl "127.0.0.1:8080/http://www.google.com"
+    curl "127.0.0.1:8000/http://www.google.com"
     
 ### Testing setup
 
@@ -86,6 +86,7 @@ In this configuration demo application must be started first and receiver second
 The configuration is based on Docker bridge network <https://docs.docker.com/engine/userguide/networking/#bridge-networks>. 
 Demo app compose file setups new Docker bridge network, sender and receiver join it 
 and only then all can access each other using their IP addresses (as found using command `docker inspect <container-name>`).
+The IP address in receiver/test.yml should be the address taken from demo (run command: docker inspect demo_app_1) and IP address in sender/test.yml should be taken from receiver (run command: docker inspect receiver_receiver_1).
 
 ### Troubleshooting
 
