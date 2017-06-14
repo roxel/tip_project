@@ -40,7 +40,7 @@ Docker Compose can be used to access the containers.
 Building Sender image and starting container:
 
     docker build -t tip_sender .
-    doc up -d
+    docker-compose up -d
     
 Sender is configured for Receiver running on the same machine by default (`http://127.0.0.1:5001`). It will not work 
 when Receiver is started inside container or on another machine. First you must change Receiver address.
@@ -53,7 +53,7 @@ The Receiver address can be changed in `docker-compose.yml` file by changing com
 Building Receiver image and starting container:
 
     docker build -t tip_receiver .
-    doc up -d
+    docker-compose up -d
     
 Receiver is configured for server application running on the same machine by default (`http://127.0.0.1:8000`). 
 It will not work when application is started inside container. First you must change Receiver address.
@@ -70,7 +70,7 @@ total count of all the links on those websites and time taken by this test.
 App can be started in Docker container. To build image and start the application:
  
     docker build -t tip_dd .
-    doc up -d
+    docker-compose up -d
     curl "127.0.0.1:8080/http://www.google.com"
     
 ### Testing setup
@@ -79,7 +79,7 @@ Basic setup allows to run docker containers in isolation. Then to use them you m
 on host machine to access the containers from outside. For testing purpose simpler setup is possible. 
 Just use `test.yml` files located in directories `sender`, `receiver` and `demo`. Instead of running `doc up -d` use:
 
-    doc -f test.yml up -d
+    docker-compose -f test.yml up -d
     
 In this configuration demo application must be started first and receiver second. 
 
