@@ -8,7 +8,8 @@ app = Flask(__name__)
 @app.route('/')
 @app.route('/<path:website>')
 def index(website='http://www.aeklors.com/'):
-    print(website)
+    if not website.startswith("http"):
+        return "Incorrect website address: {}".format(website)
     return link_counter(website)
 
 
