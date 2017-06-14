@@ -1,4 +1,3 @@
-from datetime import datetime
 import json
 from datetime import datetime
 from mitmproxy import http
@@ -35,7 +34,6 @@ def request(flow: http.HTTPFlow) -> None:
     """time before passing to application"""
     if TIP_INCOMING in flow.request.headers:
         flow.tip_incoming = datetime.now()
-    # print(json.dumps(dict(flow.request.headers)))
 
 
 def response(flow: http.HTTPFlow) -> None:
@@ -44,9 +42,7 @@ def response(flow: http.HTTPFlow) -> None:
         flow.response.headers[TIP_APP_OUTGOING] = tip_time_to_str(datetime.now())
         flow.response.headers[TIP_APP_INCOMING] = tip_time_to_str(flow.tip_incoming)
         flow.response.headers[TIP_INCOMING] = flow.request.headers[TIP_INCOMING]
-        print(datetime.now() - flow.tip_incoming)
 
-# mitmdump -s receiver.py -p 5001 -R http://localhost:8000
 
 
 

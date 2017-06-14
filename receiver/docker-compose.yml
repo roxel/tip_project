@@ -1,8 +1,9 @@
 version: "3"
 services:
   receiver:
-    image: msendera/tip_receiver
-    command: mitmdump -s receiver.py -p 5001 -R http://localhost:8000
+    image: tip_receiver
+    command: mitmdump -s receiver.py -p 5001 -R http://127.0.0.1:8000
+    restart: always
     ports:
       - "5001:5001"
     volumes:

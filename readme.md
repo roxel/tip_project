@@ -30,6 +30,32 @@ Both the Sender and the Receiver are based on mitmproxy <https://github.com/mitm
 The solution consists of two apps isolated as docker containers: Sender and Receiver.
 Docker Compose can be used to access the containers. 
 
+### Sender image
+
+Building Sender image and starting container:
+
+    docker build -t tip_sender .
+    doc up -d
+    
+Sender is configured for Receiver running on the same machine by default (`http://127.0.0.1:5001`). It will not work 
+when Receiver is started inside container or on another machine. First you must change Receiver address.
+The Receiver address can be changed in `docker-compose.yml` file by changing command: 
+
+    mitmdump -s sender.py -p 5000 -R <receiver host:port address>
+    
+### Receiver image
+
+Building Receiver image and starting container:
+
+    docker build -t tip_receiver .
+    doc up -d
+    
+Receiver is configured for server application running on the same machine by default (`http://127.0.0.1:8000`). 
+It will not work when application is started inside container. First you must change Receiver address.
+The application address can be changed in `docker-compose.yml` file by changing command: 
+
+    mitmdump -s sender.py -p 5000 -R <receiver host:port address>
+    
 ### Demo app
 
 Demo application is based on a Python Flask framework. It's a basic crawler/link counter. For every path received as:
@@ -42,25 +68,10 @@ App can be started in Docker container. To build image and start the application
     doc up -d
     curl "127.0.0.1:8080/http://www.google.com"
 
-### Sender image
+### Troubleshooting
 
-    docker build -t roxel/sender .
-    doc up -d
-    
-### Receiver image
+* Sometimes the demo application block on incoming requests for a long time. 
+Application requests, by design, take 30-60s seconds on average websites for good internet connection.
 
-    docker build -t roxel/receiver .
-    doc up -d
-
-### Starting
-
-Sender and Receiver use mitmproxy.
-To run receiver (redirect from port 5001 to <http://localhost:8000>)
-
-    mitmdump -s receiver.py -p 5001 -R http://localhost:8000
-
-To run sender (redirect from port 5000 to <http://localhost:5001>)
-
-    mitmdump -s sender.py -p 5000 -R http://localhost:5001
 
 
