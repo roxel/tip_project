@@ -1,0 +1,16 @@
+version: "3"
+services:
+  receiver:
+    image: tip_receiver
+    command: mitmdump -s receiver.py -p 5001 -R http://172.18.0.2:8000
+    restart: always
+#    ports:
+#      - "5001:5001"
+    volumes:
+      - ./:/home/receiver
+    networks:
+      - demo_tip_project
+
+networks:
+  demo_tip_project:
+    external: true

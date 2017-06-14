@@ -72,6 +72,20 @@ App can be started in Docker container. To build image and start the application
     docker build -t tip_dd .
     doc up -d
     curl "127.0.0.1:8080/http://www.google.com"
+    
+### Testing setup
+
+Basic setup allows to run docker containers in isolation. Then to use them you must start them and open ports 
+on host machine to access the containers from outside. For testing purpose simpler setup is possible. 
+Just use `test.yml` files located in directories `sender`, `receiver` and `demo`. Instead of running `doc up -d` use:
+
+    doc -f test.yml up -d
+    
+In this configuration demo application must be started first and receiver second. 
+
+The configuration is based on Docker bridge network <https://docs.docker.com/engine/userguide/networking/#bridge-networks>. 
+Demo app compose file setups new Docker bridge network, sender and receiver join it 
+and only then all can access each other using their IP addresses (as found using command `docker inspect <container-name>`).
 
 ### Troubleshooting
 
