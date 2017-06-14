@@ -23,6 +23,11 @@ Parameters monitored:
 
 Statistics are generated as csv file on the machine where Sender is running.
 
+Measurements are saved into `measurements.txt` csv file saved in location where Sender volume is mounted. 
+The file is structured as: `{timestamp received};{S2R time};{R2R time};{R2S time}`, e.g.:
+
+    2017-06-14 10:22:47.759235;0:00:00.018204;0:00:01.061349;0:00:00.005918
+
 Both the Sender and the Receiver are based on mitmproxy <https://github.com/mitmproxy/mitmproxy/>.
 
 ## Code
