@@ -6,9 +6,13 @@ Docker Compose can be used to access the containers.
 
 ## Demo app
 
-Demo app is a Python Django application running in Docker container. To build the image and start application:
+Demo application is based on a Python Flask framework. It's a basic crawler/link counter. For every path received as:
+`http://127.0.0.1:8080/<address-to-test>` it visits the address and all websites referenced in `<a>` tags, then it returns 
+total count of all the links on those websites and time taken by this test.
+
+App can be started in Docker container. To build image and start the application:
  
-    docker build -t roxel/dd .
+    docker build -t tip_dd .
     doc up -d
     curl "127.0.0.1:8080/http://www.google.com"
 
